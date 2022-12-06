@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
+// TODO: Separate mock api per app
+import App from "./apps/graphql-app";
 
 const prepare = async () => {
   if (!import.meta.env.DEV) return;
