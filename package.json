@@ -24,5 +24,8 @@
     "msw": "0.49.1",
     "typescript": "4.6.4",
     "vite": "3.2.3"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }
