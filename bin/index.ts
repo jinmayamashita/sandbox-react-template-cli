@@ -149,6 +149,18 @@ const run = async () => {
     `${PROJECT_SRC_DIR}/vite-env.d.ts`
   );
 
+  // components
+  fs.cpSync(`${SRC_DIR}/components`, `${PROJECT_SRC_DIR}/components`, {
+    recursive: true,
+    force: true,
+  });
+
+  // hooks
+  fs.cpSync(`${SRC_DIR}/hooks`, `${PROJECT_SRC_DIR}/hooks`, {
+    recursive: true,
+    force: true,
+  });
+
   // index.html
   fs.writeFileSync(
     `${PROJECT_DIR}/index.html`,
