@@ -223,6 +223,8 @@ const run = async () => {
   print("Done. Now run:");
   print();
   print(`cd ${projectName}`);
-  print("yarn && yarn dev");
+  print("yarn");
+  print("npx msw init ./public --save");
+  print("yarn dev");
 };
 run();
