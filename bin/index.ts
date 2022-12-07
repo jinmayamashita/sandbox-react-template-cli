@@ -32,30 +32,34 @@ const title = gradient([
 ])("ↀ Front-end templates");
 
 const getDependencies = async (
+  app: "rest" | "graphql",
   packageFile: string
 ): Promise<{
   dependencies: Record<string, string>;
   devDependencies: Record<string, string>;
 }> => {
   return rpj(packageFile).then((data: Record<string, any>) => {
-    // default dependencies
-    const defaultDeps = ["react", "react-dom", "wouter"];
-    const defaultDevDeps = [
-      "typescript",
-      "vite",
-      "@vitejs/plugin-react",
-      "msw",
-    ];
+    const dependencies = {
+      base: ["react", "react-dom", "wouter", "@tanstack/react-query"],
+      rest: [],
+      graphql: ["graphql", "graphql-request"],
+    };
+
+    const devDependencies = {
+      base: ["typescript", "vite", "@vitejs/plugin-react", "msw"],
+      rest: [],
+      graphql: [],
+    };
 
     return {
       dependencies: Object.fromEntries(
         Object.entries(data.dependencies).filter((e) =>
-          new Set([...defaultDeps]).has(e[0])
+          new Set([...dependencies.base, ...dependencies[app]]).has(e[0])
         )
       ),
       devDependencies: Object.fromEntries(
         Object.entries(data.devDependencies).filter((e) =>
-          new Set([...defaultDevDeps]).has(e[0])
+          new Set([...devDependencies.base, ...devDependencies[app]]).has(e[0])
         )
       ),
     };
@@ -101,10 +105,12 @@ const run = async () => {
           })
         ).projectName;
 
-  const template = ["rest", "graphql"].includes(flags.template as string)
-    ? (flags.template as string)
+  const template: "rest" | "graphql" = ["rest", "graphql"].includes(
+    flags.template as "rest" | "graphql"
+  )
+    ? (flags.template as "rest" | "graphql")
     : (
-        await Enquirer.prompt<{ template: string }>({
+        await Enquirer.prompt<{ template: "rest" | "graphql" }>({
           name: "template",
           type: "select",
           message: "Choose the API design architecture for your project",
@@ -189,6 +195,7 @@ const run = async () => {
   // package.json
   // TODO: dependencies by templates
   const { dependencies, devDependencies } = await getDependencies(
+    template,
     path.resolve(ROOT_DIR, "package.json")
   );
   let json = JSON.stringify(
