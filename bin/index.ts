@@ -180,10 +180,10 @@ const run = async () => {
   );
 
   // mock files
-  fs.cpSync(
-    path.resolve(SRC_DIR, "__mocks__"),
-    `${PROJECT_SRC_DIR}/__mocks__`,
-    { recursive: true }
+  fs.mkdirSync(`${PROJECT_SRC_DIR}/__mocks__`, { recursive: true });
+  fs.copyFileSync(
+    path.resolve(SRC_DIR, `__mocks__/${template}-api.ts`),
+    `${PROJECT_SRC_DIR}/__mocks__/api.ts`
   );
 
   // package.json
