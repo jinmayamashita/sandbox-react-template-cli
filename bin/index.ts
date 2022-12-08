@@ -97,29 +97,29 @@ const run = async () => {
     input.length > 0
       ? input[0]
       : (
-          await Enquirer.prompt<{ projectName: string }>({
-            type: "input",
-            name: "projectName",
-            initial: "my-project",
-            message: "Where would you like to create your project?",
-          })
-        ).projectName;
+        await Enquirer.prompt<{ projectName: string }>({
+          type: "input",
+          name: "projectName",
+          initial: "my-project",
+          message: "Where would you like to create your project?",
+        })
+      ).projectName;
 
   const template: "rest" | "graphql" = ["rest", "graphql"].includes(
     flags.template as "rest" | "graphql"
   )
     ? (flags.template as "rest" | "graphql")
     : (
-        await Enquirer.prompt<{ template: "rest" | "graphql" }>({
-          name: "template",
-          type: "select",
-          message: "Choose the API design architecture for your project",
-          choices: [
-            { name: "rest", message: "RESTful" },
-            { name: "graphql", message: "GraphQL" },
-          ],
-        })
-      ).template;
+      await Enquirer.prompt<{ template: "rest" | "graphql" }>({
+        name: "template",
+        type: "select",
+        message: "Choose the API design architecture for your project",
+        choices: [
+          { name: "rest", message: "RESTful" },
+          { name: "graphql", message: "GraphQL" },
+        ],
+      })
+    ).template;
 
   // TODO:
   const apps = {
