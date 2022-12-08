@@ -6,7 +6,9 @@ const prepare = async () => {
   if (!import.meta.env.DEV) return;
 
   const { worker } = await import("./__mocks__/api");
-  worker.start();
+  worker.start({
+    onUnhandledRequest: "bypass",
+  });
 };
 
 prepare().then(() => {
