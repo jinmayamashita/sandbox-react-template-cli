@@ -1,5 +1,3 @@
-import { lazy } from "react";
+import App from "@/templates/app";
 
-export default lazy(
-  () => import(`./apps/${import.meta.env.VITE_API_ARCHITECTURE}-app/app.tsx`)
-);
+export default App;

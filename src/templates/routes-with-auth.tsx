@@ -1,3 +1,4 @@
+//TODO: make the private routes
 import { Route, Switch } from "wouter";
 import Home from "@/components/pages/home";
 import User from "@/components/pages/user";

@@ -1,3 +1,4 @@
+//TODO: add auth provider
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Routes from "@/routes";
 
