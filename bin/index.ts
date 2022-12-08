@@ -136,21 +136,33 @@ const run = async () => {
 
   fs.mkdirSync(PROJECT_SRC_DIR, { recursive: true });
 
-  const appRoot = path.resolve(SRC_DIR, `apps/${template}-app.tsx`);
+  const TEMPLATE_DIR = path.resolve(SRC_DIR, `apps/${template}-app`);
 
   // src files
   fs.copyFileSync(
     path.resolve(SRC_DIR, `main.tsx`),
     `${PROJECT_SRC_DIR}/main.tsx`
   );
-  fs.copyFileSync(appRoot, `${PROJECT_SRC_DIR}/app.tsx`);
+  fs.copyFileSync(`${TEMPLATE_DIR}/app.tsx`, `${PROJECT_SRC_DIR}/app.tsx`);
   fs.copyFileSync(
     path.resolve(SRC_DIR, "vite-env.d.ts"),
     `${PROJECT_SRC_DIR}/vite-env.d.ts`
   );
 
+  // routes
+  fs.copyFileSync(
+    path.resolve(SRC_DIR, "routes.tsx"),
+    `${PROJECT_SRC_DIR}/routes.tsx`
+  );
+
   // components
   fs.cpSync(`${SRC_DIR}/components`, `${PROJECT_SRC_DIR}/components`, {
+    recursive: true,
+    force: true,
+  });
+
+  // overwrite file
+  fs.cpSync(`${TEMPLATE_DIR}/components`, `${PROJECT_SRC_DIR}/components`, {
     recursive: true,
     force: true,
   });

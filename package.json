@@ -4,8 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev:rest": "vite --mode=rest",
+    "dev:graphql": "vite --mode=graphql",
+    "dev": "yarn dev:rest",
+    "build": "tsc && vite build FOO=BAR",
     "preview": "vite preview"
   },
   "dependencies": {

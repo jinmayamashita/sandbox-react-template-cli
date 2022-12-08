@@ -1,4 +1,5 @@
-// TODO: Separate mock api per app
-import App from "@/apps/graphql-app";
+import { lazy } from "react";
 
-export default () => <App />;
+export default lazy(
+  () => import(`./apps/${import.meta.env.VITE_API_ARCHITECTURE}-app/app.tsx`)
+);
