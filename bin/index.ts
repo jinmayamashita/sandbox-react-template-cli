@@ -86,7 +86,7 @@ const run = async () => {
     importMeta: import.meta,
     flags: {
       help: { type: "boolean", default: false, alias: "h" },
-      template: { type: "string" },
+      api: { type: "string" },
       version: { type: "boolean", default: false, alias: "v" },
     },
   });
@@ -107,13 +107,13 @@ const run = async () => {
           })
         ).projectName;
 
-  const template: "rest" | "graphql" = ["rest", "graphql"].includes(
-    flags.template as "rest" | "graphql"
+  const api: "rest" | "graphql" = ["rest", "graphql"].includes(
+    flags.api as "rest" | "graphql"
   )
-    ? (flags.template as "rest" | "graphql")
+    ? (flags.api as "rest" | "graphql")
     : (
-        await Enquirer.prompt<{ template: "rest" | "graphql" }>({
-          name: "template",
+        await Enquirer.prompt<{ api: "rest" | "graphql" }>({
+          name: "api",
           type: "select",
           message: "Choose the API design architecture for your project",
           choices: [
@@ -121,7 +121,7 @@ const run = async () => {
             { name: "graphql", message: "GraphQL" },
           ],
         })
-      ).template;
+      ).api;
 
   // TODO:
   const apps = {
@@ -157,7 +157,7 @@ const run = async () => {
   // pages
   // TODO: Page file does not nest
   fs.copyFileSync(
-    `${TEMPLATE_DIR}/page-with-${template}.tsx`,
+    `${TEMPLATE_DIR}/page-with-${api}.tsx`,
     `${PROJECT_SRC_DIR}/components/pages/user.tsx`
   );
 
@@ -165,7 +165,7 @@ const run = async () => {
   // NOTE: It doesn't feel right that mock is directly under the src
   fs.mkdirSync(`${PROJECT_SRC_DIR}/__mocks__`, { recursive: true });
   fs.copyFileSync(
-    path.resolve(SRC_DIR, `__mocks__/${template}-api.ts`),
+    path.resolve(SRC_DIR, `__mocks__/${api}-api.ts`),
     `${PROJECT_SRC_DIR}/__mocks__/api.ts`
   );
 
@@ -207,7 +207,7 @@ const run = async () => {
 
   // package.json
   const { dependencies, devDependencies } = await getDependencies(
-    template,
+    api,
     path.resolve(ROOT_DIR, "package.json")
   );
   let json = JSON.stringify(
