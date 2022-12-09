@@ -99,29 +99,29 @@ const run = async () => {
     input.length > 0
       ? input[0]
       : (
-        await Enquirer.prompt<{ projectName: string }>({
-          type: "input",
-          name: "projectName",
-          initial: "my-project",
-          message: "Where would you like to create your project?",
-        })
-      ).projectName;
+          await Enquirer.prompt<{ projectName: string }>({
+            type: "input",
+            name: "projectName",
+            initial: "my-project",
+            message: "Where would you like to create your project?",
+          })
+        ).projectName;
 
   const template: "rest" | "graphql" = ["rest", "graphql"].includes(
     flags.template as "rest" | "graphql"
   )
     ? (flags.template as "rest" | "graphql")
     : (
-      await Enquirer.prompt<{ template: "rest" | "graphql" }>({
-        name: "template",
-        type: "select",
-        message: "Choose the API design architecture for your project",
-        choices: [
-          { name: "rest", message: "RESTful" },
-          { name: "graphql", message: "GraphQL" },
-        ],
-      })
-    ).template;
+        await Enquirer.prompt<{ template: "rest" | "graphql" }>({
+          name: "template",
+          type: "select",
+          message: "Choose the API design architecture for your project",
+          choices: [
+            { name: "rest", message: "RESTful" },
+            { name: "graphql", message: "GraphQL" },
+          ],
+        })
+      ).template;
 
   // TODO:
   const apps = {
@@ -142,18 +142,24 @@ const run = async () => {
   fs.cpSync(SRC_DIR, PROJECT_SRC_DIR, {
     recursive: true,
     force: true,
-    filter: (f => ![TEMPLATE_DIR, MOCKING_DIR].includes(f))
+    filter: (f) => ![TEMPLATE_DIR, MOCKING_DIR].includes(f),
   });
 
   // app
   fs.copyFileSync(`${TEMPLATE_DIR}/app.tsx`, `${PROJECT_SRC_DIR}/app.tsx`);
 
   // routes
-  fs.copyFileSync(`${TEMPLATE_DIR}/routes.tsx`, `${PROJECT_SRC_DIR}/routes.tsx`);
+  fs.copyFileSync(
+    `${TEMPLATE_DIR}/routes.tsx`,
+    `${PROJECT_SRC_DIR}/routes.tsx`
+  );
 
   // pages
   // TODO: Page file does not nest
-  fs.copyFileSync(`${TEMPLATE_DIR}/page-with-${template}.tsx`, `${PROJECT_SRC_DIR}/components/pages/user.tsx`);
+  fs.copyFileSync(
+    `${TEMPLATE_DIR}/page-with-${template}.tsx`,
+    `${PROJECT_SRC_DIR}/components/pages/user.tsx`
+  );
 
   // mock files
   // NOTE: It doesn't feel right that mock is directly under the src
@@ -162,7 +168,6 @@ const run = async () => {
     path.resolve(SRC_DIR, `__mocks__/${template}-api.ts`),
     `${PROJECT_SRC_DIR}/__mocks__/api.ts`
   );
-
 
   // index.html
   fs.writeFileSync(
@@ -199,7 +204,6 @@ const run = async () => {
     path.resolve(ROOT_DIR, "vite.config.ts"),
     `${PROJECT_DIR}/vite.config.ts`
   );
-
 
   // package.json
   const { dependencies, devDependencies } = await getDependencies(
