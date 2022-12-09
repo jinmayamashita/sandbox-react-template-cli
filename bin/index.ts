@@ -71,6 +71,8 @@ const __filename = url.fileURLToPath(import.meta.url);
 
 const ROOT_DIR = path.resolve(path.dirname(__filename), "..");
 const SRC_DIR = path.resolve(ROOT_DIR, "src");
+const TEMPLATE_DIR = path.resolve(SRC_DIR, "templates");
+const MOCKING_DIR = path.resolve(SRC_DIR, "__mocks__");
 
 // main
 const run = async () => {
@@ -136,60 +138,49 @@ const run = async () => {
 
   fs.mkdirSync(PROJECT_SRC_DIR, { recursive: true });
 
-  const TEMPLATE_DIR = path.resolve(SRC_DIR, `apps/${template}-app`);
+  // Copy directories under src
+  fs.cpSync(SRC_DIR, PROJECT_SRC_DIR, {
+    recursive: true,
+    force: true,
+    filter: (f => ![TEMPLATE_DIR, MOCKING_DIR].includes(f))
+  });
 
-  // src files
-  fs.copyFileSync(
-    path.resolve(SRC_DIR, `main.tsx`),
-    `${PROJECT_SRC_DIR}/main.tsx`
-  );
+  // app
   fs.copyFileSync(`${TEMPLATE_DIR}/app.tsx`, `${PROJECT_SRC_DIR}/app.tsx`);
-  fs.copyFileSync(
-    path.resolve(SRC_DIR, "vite-env.d.ts"),
-    `${PROJECT_SRC_DIR}/vite-env.d.ts`
-  );
 
   // routes
+  fs.copyFileSync(`${TEMPLATE_DIR}/routes.tsx`, `${PROJECT_SRC_DIR}/routes.tsx`);
+
+  // pages
+  // TODO: Page file does not nest
+  fs.copyFileSync(`${TEMPLATE_DIR}/page-with-${template}.tsx`, `${PROJECT_SRC_DIR}/components/pages/user.tsx`);
+
+  // mock files
+  // NOTE: It doesn't feel right that mock is directly under the src
+  fs.mkdirSync(`${PROJECT_SRC_DIR}/__mocks__`, { recursive: true });
   fs.copyFileSync(
-    path.resolve(SRC_DIR, "routes.tsx"),
-    `${PROJECT_SRC_DIR}/routes.tsx`
+    path.resolve(SRC_DIR, `__mocks__/${template}-api.ts`),
+    `${PROJECT_SRC_DIR}/__mocks__/api.ts`
   );
 
-  // components
-  fs.cpSync(`${SRC_DIR}/components`, `${PROJECT_SRC_DIR}/components`, {
-    recursive: true,
-    force: true,
-  });
-
-  // overwrite file
-  fs.cpSync(`${TEMPLATE_DIR}/components`, `${PROJECT_SRC_DIR}/components`, {
-    recursive: true,
-    force: true,
-  });
-
-  // hooks
-  fs.cpSync(`${SRC_DIR}/hooks`, `${PROJECT_SRC_DIR}/hooks`, {
-    recursive: true,
-    force: true,
-  });
 
   // index.html
   fs.writeFileSync(
     `${PROJECT_DIR}/index.html`,
     `
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="data:;base64,iVBORw0KGgo=">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>${projectName}</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>`,
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>${projectName}</title>
+    </head>
+    <body>
+      <div id="root"></div>
+      <script type="module" src="/src/main.tsx"></script>
+    </body>
+  </html>`,
     "utf-8"
   );
 
@@ -209,15 +200,8 @@ const run = async () => {
     `${PROJECT_DIR}/vite.config.ts`
   );
 
-  // mock files
-  fs.mkdirSync(`${PROJECT_SRC_DIR}/__mocks__`, { recursive: true });
-  fs.copyFileSync(
-    path.resolve(SRC_DIR, `__mocks__/${template}-api.ts`),
-    `${PROJECT_SRC_DIR}/__mocks__/api.ts`
-  );
 
   // package.json
-  // TODO: dependencies by templates
   const { dependencies, devDependencies } = await getDependencies(
     template,
     path.resolve(ROOT_DIR, "package.json")
