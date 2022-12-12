@@ -36,7 +36,16 @@ export async function makePackages(
   ].flat();
 
   const moduleDevDependencies = [
-    modules.storybook && ["storybook"],
+    modules.storybook && [
+      "@babel/core",
+      "@storybook/addon-actions",
+      "@storybook/addon-essentials",
+      "@storybook/addon-interactions",
+      "@storybook/addon-links",
+      "@storybook/builder-vite",
+      "@storybook/react",
+      "@storybook/testing-library",
+    ],
     modules.e2e && ["@playwright/test"],
     modules.unit && ["jest"],
   ].flat();
@@ -63,6 +72,8 @@ export async function makePackages(
     scripts: {
       dev: "vite",
       build: "tsc && vite build",
+      storybook: modules.storybook ? "start-storybook -p 6006" : undefined,
+      "build-storybook": modules.storybook ? "build-storybook" : undefined,
     },
     dependencies,
     devDependencies,

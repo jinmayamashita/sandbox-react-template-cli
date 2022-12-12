@@ -158,7 +158,15 @@ export default Routes;
 
   // TODO:
   // e2e
+
   // storybook
+  const storybookTemplate = path.resolve(__rootDir, "templates", `storybook`);
+  modules.storybook &&
+    fse.copySync(storybookTemplate, projectDir, {
+      recursive: true,
+      overwrite: true,
+    });
+
   // jest
 
   // write package.json
