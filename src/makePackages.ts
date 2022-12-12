@@ -74,6 +74,7 @@ export async function makePackages(
       build: "tsc && vite build",
       storybook: modules.storybook ? "start-storybook -p 6006" : undefined,
       "build-storybook": modules.storybook ? "build-storybook" : undefined,
+      e2e: modules.e2e ? "npx playwright test" : undefined,
     },
     dependencies,
     devDependencies,

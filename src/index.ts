@@ -156,8 +156,13 @@ export default Routes;
       overwrite: true,
     });
 
-  // TODO:
   // e2e
+  const e2eTemplate = path.resolve(__rootDir, "templates", `e2e`);
+  modules.e2e &&
+    fse.copySync(e2eTemplate, projectDir, {
+      recursive: true,
+      overwrite: true,
+    });
 
   // storybook
   const storybookTemplate = path.resolve(__rootDir, "templates", `storybook`);
@@ -167,6 +172,7 @@ export default Routes;
       overwrite: true,
     });
 
+  // TODO:
   // jest
 
   // write package.json
