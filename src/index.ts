@@ -156,6 +156,14 @@ export default Routes;
       overwrite: true,
     });
 
+  // store
+  const storeTemplate = path.resolve(__rootDir, "templates", `store`);
+  modules.store &&
+    fse.copySync(storeTemplate, `${projectDir}/src`, {
+      recursive: true,
+      overwrite: true,
+    });
+
   // e2e
   const e2eTemplate = path.resolve(__rootDir, "templates", `e2e`);
   modules.e2e &&
