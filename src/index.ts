@@ -7,6 +7,15 @@ import * as path from "node:path";
 import prettier from "prettier";
 import { makePackages } from "./makePackages";
 
+type Modules = {
+  graphql: boolean;
+  auth: boolean;
+  store: boolean;
+  e2e: boolean;
+  storybook: boolean;
+  unit: boolean;
+};
+
 // variables
 const __rootDir = path.resolve(__dirname, "..");
 
@@ -27,12 +36,13 @@ function showTitle() {
   print();
 }
 
-async function success(path: string) {
+async function success({ path, modules }: { path: string; modules: Modules }) {
   print();
   print("Done. Now run:");
   print();
   print(`cd ${path}`);
   print("yarn");
+  modules.e2e && print("npx playwright install");
   //print("npx msw init ./public --save");
   print("yarn dev");
 }
@@ -197,6 +207,6 @@ export default Routes;
     )
   );
 
-  return projectName;
+  return { path: projectName, modules } as const;
 };
 run().then(success).catch(fail);
