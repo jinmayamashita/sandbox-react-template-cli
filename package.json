@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "type": "module",
   "bin": {
-    "create-react-template": "bin/index.cjs"
+    "create-react-code": "bin/index.cjs"
   },
   "scripts": {
     "build": "tsup"

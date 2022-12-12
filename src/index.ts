@@ -17,7 +17,7 @@ const title = gradient([
   "#ff4c4c",
   "#93366a",
   "#41235b",
-])("ↀ Front-end templates");
+])("ↀ React code");
 
 // helpers
 function showTitle() {
