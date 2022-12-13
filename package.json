@@ -7,6 +7,7 @@
     "create-react-code": "bin/index.cjs"
   },
   "scripts": {
+    "play": "vite --config playground/vite.config.ts serve playground",
     "build": "tsup"
   },
   "dependencies": {

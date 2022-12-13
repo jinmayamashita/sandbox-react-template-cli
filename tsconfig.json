@@ -6,6 +6,6 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": false
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "playground"],
   "exclude": ["node_modules", "templates"]
 }
