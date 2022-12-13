@@ -190,8 +190,13 @@ export default Routes;
       overwrite: true,
     });
 
-  // TODO:
-  // jest
+  // unit test
+  const unitTestTemplate = path.resolve(__rootDir, "templates", `unit`);
+  modules.unit &&
+    fse.copySync(unitTestTemplate, projectDir, {
+      recursive: true,
+      overwrite: true,
+    });
 
   // write package.json
   fse.writeFileSync(

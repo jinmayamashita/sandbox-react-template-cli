@@ -47,7 +47,7 @@ export async function makePackages(
       "@storybook/testing-library",
     ],
     modules.e2e && ["@playwright/test"],
-    modules.unit && ["jest"],
+    modules.unit && ["vitest"],
   ].flat();
 
   const dependencies = Object.fromEntries(
@@ -72,6 +72,7 @@ export async function makePackages(
     scripts: {
       dev: "vite",
       build: "tsc && vite build",
+      test: modules.unit ? "vitest" : undefined,
       storybook: modules.storybook ? "start-storybook -p 6006" : undefined,
       "build-storybook": modules.storybook ? "build-storybook" : undefined,
       e2e: modules.e2e ? "npx playwright test" : undefined,
