@@ -1,12 +1,10 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Routes from "./routes";
+import { PropsWithChildren } from "react";
 
 const queryClient = new QueryClient();
 
-export default () => {
+export default ({ children }: PropsWithChildren) => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <Routes />
-    </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   );
 };
