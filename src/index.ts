@@ -150,52 +150,14 @@ export default Routes;
   );
 
   // copy the per-package-manager template
-  // auth
-  const authTemplate = path.resolve(__rootDir, "templates", `auth`);
-  modules.auth &&
-    fse.copySync(authTemplate, `${projectDir}/src`, {
-      recursive: true,
-      overwrite: true,
-    });
-
-  // graphql
-  const graphqlTemplate = path.resolve(__rootDir, "templates", `graphql`);
-  modules.graphql &&
-    fse.copySync(graphqlTemplate, `${projectDir}/src`, {
-      recursive: true,
-      overwrite: true,
-    });
-
-  // store
-  const storeTemplate = path.resolve(__rootDir, "templates", `store`);
-  modules.store &&
-    fse.copySync(storeTemplate, `${projectDir}/src`, {
-      recursive: true,
-      overwrite: true,
-    });
-
-  // e2e
-  const e2eTemplate = path.resolve(__rootDir, "templates", `e2e`);
-  modules.e2e &&
-    fse.copySync(e2eTemplate, projectDir, {
-      recursive: true,
-      overwrite: true,
-    });
-
-  // storybook
-  const storybookTemplate = path.resolve(__rootDir, "templates", `storybook`);
-  modules.storybook &&
-    fse.copySync(storybookTemplate, projectDir, {
-      recursive: true,
-      overwrite: true,
-    });
-
-  // unit test
-  const unitTestTemplate = path.resolve(__rootDir, "templates", `unit`);
-  modules.unit &&
-    fse.copySync(unitTestTemplate, `${projectDir}/src`, {
-      recursive: true,
-      overwrite: true,
+  Object.keys(modules)
+    .filter((name) => modules[name])
+    .map((templateName) => {
+      const template = path.resolve(__rootDir, "templates", templateName);
+      fse.copySync(template, projectDir, {
+        recursive: true,
+        overwrite: true,
+      });
     });
 
   // write package.json

@@ -6,7 +6,7 @@ import "./index.css";
 async function prepare() {
   if (!import.meta.env.DEV) return;
 
-  const { worker } = await import("./__mocks__/api");
+  const { worker } = await import("./__tests__/mocks/api");
 
   worker.start({
     onUnhandledRequest: "bypass",
