@@ -72,7 +72,7 @@ export async function makePackages(
     scripts: {
       dev: "vite",
       build: "tsc && vite build",
-      test: modules.unit ? "vitest" : undefined,
+      test: modules.unit ? "vitest --watch=false" : undefined,
       storybook: modules.storybook ? "start-storybook -p 6006" : undefined,
       "build-storybook": modules.storybook ? "build-storybook" : undefined,
       e2e: modules.e2e ? "npx playwright test" : undefined,

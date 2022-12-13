@@ -193,7 +193,7 @@ export default Routes;
   // unit test
   const unitTestTemplate = path.resolve(__rootDir, "templates", `unit`);
   modules.unit &&
-    fse.copySync(unitTestTemplate, projectDir, {
+    fse.copySync(unitTestTemplate, `${projectDir}/src`, {
       recursive: true,
       overwrite: true,
     });
