@@ -21,6 +21,7 @@ export async function makePackages(
     "react-dom",
     "wouter",
     "@tanstack/react-query",
+    "ramda",
   ];
 
   const baseDevDependencies = [
@@ -29,6 +30,7 @@ export async function makePackages(
     "@vitejs/plugin-react",
     "msw",
     "prettier",
+    "@types/ramda",
   ];
 
   const moduleDependencies = [

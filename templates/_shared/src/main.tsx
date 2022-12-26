@@ -1,7 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./app";
-import Routes from "./routes";
 import "./index.css";
 
 // TODO: Better flexibility if we pass the mock worker path as an argument
@@ -20,9 +19,7 @@ prepare().then(() => {
     document.getElementById("root") as HTMLElement
   ).render(
     <React.StrictMode>
-      <App>
-        <Routes />
-      </App>
+      <App />
     </React.StrictMode>
   );
 });
