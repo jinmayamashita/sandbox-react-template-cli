@@ -10086,13 +10086,20 @@ var run = async () => {
     import_fs_extra.default.copySync(template, moduleDir, {
       recursive: true,
       filter: (src) => {
-        return !["pages"].includes(path.basename(src));
+        return !["pages", "__tests__"].includes(path.basename(src));
       }
     });
     const pagesDir = path.resolve(template, "pages");
     import_fs_extra.default.copySync(pagesDir, `${projectDir}/src/pages`, {
       recursive: true,
       overwrite: true
+    });
+    const testsDir = path.resolve(template, "__tests__");
+    import_fs_extra.default.ensureDir(testsDir).then(() => {
+      import_fs_extra.default.copySync(testsDir, `${projectDir}/src/__tests__`, {
+        recursive: true,
+        overwrite: true
+      });
     });
   });
   import_fs_extra.default.writeFileSync(
