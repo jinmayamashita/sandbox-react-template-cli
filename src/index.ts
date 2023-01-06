@@ -150,13 +150,16 @@ export default Routes;
   );
 
   // copy the per-package-manager template
+  const modulesDir = path.resolve(projectDir, "src/modules");
+  fse.mkdirSync(modulesDir, { recursive: true });
+
   Object.keys(modules)
     .filter((name) => modules[name])
     .map((templateName) => {
+      const moduleDir = path.resolve(modulesDir, templateName);
       const template = path.resolve(__rootDir, "templates", templateName);
-      fse.copySync(template, projectDir, {
+      fse.copySync(template, moduleDir, {
         recursive: true,
-        overwrite: true,
       });
     });
 
