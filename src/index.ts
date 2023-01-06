@@ -89,10 +89,11 @@ const run = async () => {
     await Enquirer.prompt<{ modules: string[] }>({
       type: "multiselect",
       name: "modules",
-      initial: [0, 1, 2],
+      initial: [0, 2],
       message: "Which features do you want to use?",
       // @ts-expect-error multiple selections not allowed in initial type
       choices: [
+        { name: "foo", message: "Foo" },
         { name: "graphql", message: "GraphQL" },
         { name: "auth", message: "Auth" },
         { name: "store", message: "Store" },

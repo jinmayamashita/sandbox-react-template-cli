@@ -10054,9 +10054,10 @@ var run = async () => {
   const modules = (await import_enquirer.default.prompt({
     type: "multiselect",
     name: "modules",
-    initial: [0, 1, 2],
+    initial: [0, 2],
     message: "Which features do you want to use?",
     choices: [
+      { name: "foo", message: "Foo" },
       { name: "graphql", message: "GraphQL" },
       { name: "auth", message: "Auth" },
       { name: "store", message: "Store" },
