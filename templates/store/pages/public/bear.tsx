@@ -1,4 +1,4 @@
-import { useStore } from "../hooks/useStore";
+import { useStore } from "../../modules/store/hooks/useStore";
 
 function Bear() {
   const { count, inc } = useStore();

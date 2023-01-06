@@ -116,39 +116,6 @@ const run = async () => {
     }
   );
 
-  // write routes.tsx
-  fse.writeFileSync(
-    path.join(projectDir, "src/routes.tsx"),
-    prettier.format(
-      `
-import { Route, Switch } from "wouter";
-import Home from "./pages/home";
-import User from "./pages/user";
-${modules.auth ? `import { PrivateRoute } from "./hooks/useAuth";` : ""}
-${modules.auth ? `import Secret from "./pages/secret";` : ""}
-${modules.store ? `import BearStore from "./pages/bear";` : ""}
-
-function Routes() {
-  return(
-    <Switch>
-      ${
-        modules.auth
-          ? `<PrivateRoute path="/secret"><Secret /></PrivateRoute>`
-          : ""
-      }
-      ${modules.store ? `<Route path="/store"><BearStore /></Route>` : ""}
-      <Route path="/user"><User /></Route>
-      <Route path="/"><Home /></Route>
-      <Route>404</Route>
-    </Switch>
-  )
-}
-export default Routes;
-`,
-      { parser: "babel" }
-    )
-  );
-
   // copy the per-package-manager template
   const modulesDir = path.resolve(projectDir, "src/modules");
   fse.mkdirSync(modulesDir, { recursive: true });
