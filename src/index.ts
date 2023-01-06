@@ -160,6 +160,16 @@ export default Routes;
       const template = path.resolve(__rootDir, "templates", templateName);
       fse.copySync(template, moduleDir, {
         recursive: true,
+        filter: (src) => {
+          return !["pages"].includes(path.basename(src));
+        },
+      });
+
+      // copy pages
+      const pagesDir = path.resolve(template, "pages");
+      fse.copySync(pagesDir, `${projectDir}/src/pages`, {
+        recursive: true,
+        overwrite: true,
       });
     });
 
