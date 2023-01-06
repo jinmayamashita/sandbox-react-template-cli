@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { AuthProvider } from "./hooks/useAuth";
+import AuthProvider from "./modules/auth/hooks/useAuth";
 import { PropsWithChildren } from "react";
 
 const queryClient = new QueryClient();

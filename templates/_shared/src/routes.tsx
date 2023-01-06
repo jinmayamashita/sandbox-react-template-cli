@@ -1,4 +1,4 @@
-import { lazy, PropsWithChildren, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { Route, Switch } from "wouter";
 
 const publicPages = import.meta.glob("./pages/public/**/*.tsx");
@@ -25,37 +25,25 @@ function routes(modules: Record<string, any>) {
 
 const Home = lazy(() => import("./pages/public/home"));
 
-// Working with Auth module
-const DeferredAuthProvider = lazy(() => import("./modules/auth/hooks/useAuth"));
-
-function AuthProvider({ children }: PropsWithChildren) {
-  if (Object.keys(secretPages).length) {
-    return <DeferredAuthProvider>{children}</DeferredAuthProvider>;
-  }
-  return <>{children}</>;
-}
-
 // Routes
 export default () => {
   return (
     <Suspense>
-      <AuthProvider>
-        <Switch>
-          {[...routes(publicPages), ...routes(secretPages)].map(
-            ({ path, Component }) => {
-              return (
-                <Route key={path} path={path}>
-                  {(props) => <Component {...props} />}
-                </Route>
-              );
-            }
-          )}
-          <Route path="/">
-            <Home />
-          </Route>
-          <Route>404</Route>
-        </Switch>
-      </AuthProvider>
+      <Switch>
+        {[...routes(publicPages), ...routes(secretPages)].map(
+          ({ path, Component }) => {
+            return (
+              <Route key={path} path={path}>
+                {(props) => <Component {...props} />}
+              </Route>
+            );
+          }
+        )}
+        <Route path="/">
+          <Home />
+        </Route>
+        <Route>404</Route>
+      </Switch>
     </Suspense>
   );
 };

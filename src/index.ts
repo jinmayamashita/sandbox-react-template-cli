@@ -128,7 +128,9 @@ const run = async () => {
       fse.copySync(template, moduleDir, {
         recursive: true,
         filter: (src) => {
-          return !["pages", "__tests__"].includes(path.basename(src));
+          return !["pages", "__tests__", "app.tsx"].includes(
+            path.basename(src)
+          );
         },
       });
 
@@ -138,6 +140,13 @@ const run = async () => {
         recursive: true,
         overwrite: true,
       });
+
+      // overwrite app.tsx
+      const appFile = path.resolve(template, "app.tsx");
+      fse.existsSync(appFile) &&
+        fse.copySync(appFile, `${projectDir}/src/app.tsx`, {
+          overwrite: true,
+        });
 
       // copy __tests__
       const testsDir = path.resolve(template, "__tests__");
