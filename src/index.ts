@@ -147,6 +147,12 @@ const run = async () => {
           overwrite: true,
         });
       });
+
+      // remove unnecessary folders
+      fse.readdir(
+        moduleDir,
+        (_, files) => !files.length && fse.remove(moduleDir)
+      );
     });
 
   // write package.json

@@ -10101,6 +10101,10 @@ var run = async () => {
         overwrite: true
       });
     });
+    import_fs_extra.default.readdir(
+      moduleDir,
+      (_, files) => !files.length && import_fs_extra.default.remove(moduleDir)
+    );
   });
   import_fs_extra.default.writeFileSync(
     path.join(projectDir, "package.json"),
