@@ -89,10 +89,11 @@ const run = async () => {
     await Enquirer.prompt<{ modules: string[] }>({
       type: "multiselect",
       name: "modules",
-      initial: [0, 1, 2],
+      initial: [0, 2],
       message: "Which features do you want to use?",
       // @ts-expect-error multiple selections not allowed in initial type
       choices: [
+        { name: "foo", message: "Foo" },
         { name: "graphql", message: "GraphQL" },
         { name: "auth", message: "Auth" },
         { name: "store", message: "Store" },
@@ -116,48 +117,52 @@ const run = async () => {
     }
   );
 
-  // write routes.tsx
-  fse.writeFileSync(
-    path.join(projectDir, "src/routes.tsx"),
-    prettier.format(
-      `
-import { Route, Switch } from "wouter";
-import Home from "./pages/home";
-import User from "./pages/user";
-${modules.auth ? `import { PrivateRoute } from "./hooks/useAuth";` : ""}
-${modules.auth ? `import Secret from "./pages/secret";` : ""}
-${modules.store ? `import BearStore from "./pages/bear";` : ""}
-
-function Routes() {
-  return(
-    <Switch>
-      ${
-        modules.auth
-          ? `<PrivateRoute path="/secret"><Secret /></PrivateRoute>`
-          : ""
-      }
-      ${modules.store ? `<Route path="/store"><BearStore /></Route>` : ""}
-      <Route path="/user"><User /></Route>
-      <Route path="/"><Home /></Route>
-      <Route>404</Route>
-    </Switch>
-  )
-}
-export default Routes;
-`,
-      { parser: "babel" }
-    )
-  );
-
   // copy the per-package-manager template
+  const modulesDir = path.resolve(projectDir, "src/modules");
+  fse.mkdirSync(modulesDir, { recursive: true });
+
   Object.keys(modules)
     .filter((name) => modules[name])
     .map((templateName) => {
+      const moduleDir = path.resolve(modulesDir, templateName);
       const template = path.resolve(__rootDir, "templates", templateName);
-      fse.copySync(template, projectDir, {
+      fse.copySync(template, moduleDir, {
+        recursive: true,
+        filter: (src) => {
+          return !["pages", "__tests__", "app.tsx"].includes(
+            path.basename(src)
+          );
+        },
+      });
+
+      // copy pages
+      const pagesDir = path.resolve(template, "pages");
+      fse.copySync(pagesDir, `${projectDir}/src/pages`, {
         recursive: true,
         overwrite: true,
       });
+
+      // overwrite app.tsx
+      const appFile = path.resolve(template, "app.tsx");
+      fse.existsSync(appFile) &&
+        fse.copySync(appFile, `${projectDir}/src/app.tsx`, {
+          overwrite: true,
+        });
+
+      // copy __tests__
+      const testsDir = path.resolve(template, "__tests__");
+      fse.ensureDir(testsDir).then(() => {
+        fse.copySync(testsDir, `${projectDir}/src/__tests__`, {
+          recursive: true,
+          overwrite: true,
+        });
+      });
+
+      // remove unnecessary folders
+      fse.readdir(
+        moduleDir,
+        (_, files) => !files.length && fse.remove(moduleDir)
+      );
     });
 
   // write package.json

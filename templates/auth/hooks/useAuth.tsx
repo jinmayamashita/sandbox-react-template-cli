@@ -1,9 +1,9 @@
 import { createContext, useContext, PropsWithChildren, useState } from "react";
-import { Redirect, Route, RouteProps } from "wouter";
+import { Redirect } from "wouter";
 
 const AuthContext = createContext<boolean | null>(null);
 
-export const AuthProvider = ({ children }: PropsWithChildren) => {
+const AuthProvider = ({ children }: PropsWithChildren) => {
   const [isAuthenticated, _setIsAuthenticated] = useState(false);
   return (
     <AuthContext.Provider value={isAuthenticated}>
@@ -28,9 +28,11 @@ export const useAuth = () => {
   } as const;
 };
 
-export const PrivateRoute = ({ path, children }: RouteProps) => {
+export const PrivateComponent = () => {
   const { isAuthenticated } = useAuth();
 
   if (!isAuthenticated) return <Redirect to="/login" />;
-  return <Route path={path}>{children}</Route>;
+  return <>{children}</>;
 };
+
+export default AuthProvider;
